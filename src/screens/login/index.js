@@ -1,19 +1,34 @@
 import React, {useState} from 'react';
 import {Image, KeyboardAvoidingView, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
 import {MyInput, MyButton} from '../../components';
 
 export function LoginScreen() {
   const navigation = useNavigation();
 
-  const [email, setEmail] = useState('');
-  const [pwd, setPwd] = useState('');
+  const [email, setEmail] = useState('trinhchinchin@gmail.com');
+  const [pwd, setPwd] = useState('12345678');
 
   const login = () => {
     console.log('Login');
     console.log('email', email);
     console.log('pwd', pwd);
+
+    auth()
+      .signInWithEmailAndPassword(email, pwd)
+      .then(() => {
+        console.log('User signed in anonymously');
+      })
+      .catch((error) => {
+        if (error.code === 'auth/operation-not-allowed') {
+          console.log('Enable anonymous in your firebase console.');
+        }
+
+        console.error(error);
+        alert(error.message);
+      });
   };
 
   const navigateRegister = () => navigation.navigate('Register');
@@ -34,6 +49,7 @@ export function LoginScreen() {
           placeholder="Email"
           type="email"
           autoFocus
+          autoCapitalize="none"
         />
         <MyInput
           value={pwd}

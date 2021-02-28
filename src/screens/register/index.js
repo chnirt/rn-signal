@@ -1,16 +1,19 @@
 import React, {useLayoutEffect, useState} from 'react';
 import {KeyboardAvoidingView, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
 import {MyButton, MyInput, MyText} from '../../components';
 
 export function RegisterScreen() {
   const navigation = useNavigation();
 
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [pwd, setPwd] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [fullName, setFullName] = useState('Trinh Chin Chin');
+  const [email, setEmail] = useState('trinhchinchin@gmail.com');
+  const [pwd, setPwd] = useState('12345678');
+  const [imageUrl, setImageUrl] = useState(
+    'https://images.pexels.com/photos/1382731/pexels-photo-1382731.jpeg?cs=srgb&dl=pexels-tu%E1%BA%A5n-ki%E1%BB%87t-jr-1382731.jpg&fm=jpg',
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -20,6 +23,30 @@ export function RegisterScreen() {
 
   const register = () => {
     console.log('Register');
+    auth()
+      .createUserWithEmailAndPassword(email, pwd)
+      .then((authUser) => {
+        console.log('User account created & signed in!');
+        authUser.user.updateProfile({
+          displayName: fullName,
+          photoURL:
+            imageUrl ||
+            'https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1223671392?b=1&k=6&m=1223671392&s=612x612&w=0&h=5VMcL3a_1Ni5rRHX0LkaA25lD_0vkhFsb1iVm1HKVSQ=',
+        });
+      })
+      .catch((error) => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+        }
+
+        console.error(error);
+        // eslint-disable-next-line no-alert
+        alert(error.message);
+      });
   };
 
   return (
@@ -41,6 +68,7 @@ export function RegisterScreen() {
           onChangeText={setEmail}
           placeholder="Email"
           type="email"
+          autoCapitalize="none"
         />
         <MyInput
           value={pwd}
