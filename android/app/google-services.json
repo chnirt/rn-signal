@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "305735194145",
+    "project_id": "rn-signal-cc7a3",
+    "storage_bucket": "rn-signal-cc7a3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:305735194145:android:336593afeb15c27d997560",
+        "android_client_info": {
+          "package_name": "com.rnsignal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "305735194145-lrnoutkdv39ijh8jf9k7ljc4phl494gd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rnsignal",
+            "certificate_hash": "f4153ab1d21b77ae34cf6f72be6183d22d3aeeac"
+          }
+        },
+        {
+          "client_id": "305735194145-4hnhtl1ahqa0m91t4rfm7ipgeqaiobbm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTFNiqmRN4j_BgVEeFT61JQEnKNeSIh48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "305735194145-4hnhtl1ahqa0m91t4rfm7ipgeqaiobbm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
