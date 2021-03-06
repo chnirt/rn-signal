@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {Image, KeyboardAvoidingView, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import auth from '@react-native-firebase/auth';
 
 import {MyInput, MyButton} from '../../components';
+import {fbAuth} from '../../firebase';
 
 export function LoginScreen() {
   const navigation = useNavigation();
@@ -12,21 +12,23 @@ export function LoginScreen() {
   const [pwd, setPwd] = useState('12345678');
 
   const login = () => {
-    console.log('Login');
-    console.log('email', email);
-    console.log('pwd', pwd);
+    // console.log('Login');
+    // console.log('email', email);
+    // console.log('pwd', pwd);
 
-    auth()
+    fbAuth
       .signInWithEmailAndPassword(email, pwd)
       .then(() => {
-        console.log('User signed in anonymously');
+        // console.log('User signed in anonymously');
       })
       .catch((error) => {
         if (error.code === 'auth/operation-not-allowed') {
-          console.log('Enable anonymous in your firebase console.');
+          // console.log('Enable anonymous in your firebase console.');
         }
 
-        console.error(error);
+        // console.error(error);
+
+        // eslint-disable-next-line no-alert
         alert(error.message);
       });
   };
@@ -54,6 +56,7 @@ export function LoginScreen() {
         <MyInput
           value={pwd}
           onChangeText={setPwd}
+          onSubmitEditing={login}
           placeholder="Password"
           type="password"
           secureTextEntry
