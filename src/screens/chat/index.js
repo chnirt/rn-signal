@@ -11,7 +11,6 @@ export function ChatScreen() {
   const route = useRoute();
   const params = route?.params;
   const chatName = params?.chatName;
-  console.log(params);
 
   useEffect(() => {
     navigation.setOptions({
@@ -41,9 +40,7 @@ export function ChatScreen() {
 
   return (
     <View style={styles.container}>
-      <Text>
-        {params?.id} {chatName}
-      </Text>
+      <Text>{chatName}</Text>
     </View>
   );
 }

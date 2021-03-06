@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
+import {useRecoilState} from 'recoil';
 
 import {fbAuth} from '../firebase';
 import {
@@ -18,6 +19,7 @@ import {
   CHAT,
   PRIMARY_COLOR,
 } from '../constants';
+import {loadingState} from '../recoils';
 
 const Stack = createStackNavigator();
 
@@ -29,21 +31,17 @@ const globalScreenOptions = {
 
 export function AppStack() {
   // Set an initializing state whilst Firebase connects
+  const [loading, setLoading] = useRecoilState(loadingState);
   const [initializing, setInitializing] = useState(true);
-  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
 
   // Handle user state changes
   function onAuthStateChanged(authUser) {
-    setLoading(true);
+    // console.log(authUser);
+    setUser(authUser);
+    if (initializing) setInitializing(false);
 
-    setTimeout(() => {
-      // console.log(authUser);
-      setUser(authUser);
-      if (initializing) setInitializing(false);
-
-      setLoading(false);
-    }, 1000);
+    setLoading(false);
   }
 
   useEffect(() => {

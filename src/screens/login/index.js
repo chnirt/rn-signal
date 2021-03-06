@@ -1,12 +1,15 @@
 import React, {useState} from 'react';
 import {Image, KeyboardAvoidingView, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {useSetRecoilState} from 'recoil';
 
 import {MyInput, MyButton} from '../../components';
 import {fbAuth} from '../../firebase';
+import {loadingState} from '../../recoils';
 
 export function LoginScreen() {
   const navigation = useNavigation();
+  const setLoading = useSetRecoilState(loadingState);
 
   const [email, setEmail] = useState('trinhchinchin@gmail.com');
   const [pwd, setPwd] = useState('12345678');
@@ -15,6 +18,7 @@ export function LoginScreen() {
     // console.log('Login');
     // console.log('email', email);
     // console.log('pwd', pwd);
+    setLoading(true);
 
     fbAuth
       .signInWithEmailAndPassword(email, pwd)
@@ -30,6 +34,7 @@ export function LoginScreen() {
 
         // eslint-disable-next-line no-alert
         alert(error.message);
+        setLoading(false);
       });
   };
 

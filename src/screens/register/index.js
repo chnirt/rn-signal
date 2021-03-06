@@ -1,12 +1,15 @@
 import React, {useLayoutEffect, useState} from 'react';
 import {KeyboardAvoidingView, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import auth from '@react-native-firebase/auth';
+import {useSetRecoilState} from 'recoil';
 
+import {fbAuth} from '../../firebase';
 import {MyButton, MyInput, MyText} from '../../components';
+import {loadingState} from '../../recoils';
 
 export function RegisterScreen() {
   const navigation = useNavigation();
+  const setLoading = useSetRecoilState(loadingState);
 
   const [fullName, setFullName] = useState('Dao Vinh Ky');
   const [email, setEmail] = useState('ky.dao0109@gmail.com');
@@ -24,8 +27,9 @@ export function RegisterScreen() {
 
   const register = () => {
     // console.log('Register');
+    setLoading(true);
 
-    auth()
+    fbAuth
       .createUserWithEmailAndPassword(email, pwd)
       .then((authUser) => {
         console.log('User account created & signed in!');
@@ -49,6 +53,7 @@ export function RegisterScreen() {
         // console.error(error);
         // eslint-disable-next-line no-alert
         alert(error.message);
+        setLoading(false);
       });
   };
 

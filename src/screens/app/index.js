@@ -1,15 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {useSetRecoilState} from 'recoil';
 
 import {CREATE_CHAT, CHAT} from '../../constants';
 import {fbAuth, fbFirestore} from '../../firebase';
 import {MyAvatar, MyList} from '../../components';
 import {CameraSVG} from '../../assets/svgs/camera';
 import {PencilSVG} from '../../assets/svgs/pencil';
+import {loadingState} from '../../recoils';
 
 export function AppScreen() {
   const navigation = useNavigation();
+  const setLoading = useSetRecoilState(loadingState);
 
   const [chats, setChats] = useState([]);
 
@@ -63,6 +66,8 @@ export function AppScreen() {
   }, []);
 
   const logout = () => {
+    setLoading(true);
+
     fbAuth.signOut().then(() => {
       // console.log('User signed out!');
     });
