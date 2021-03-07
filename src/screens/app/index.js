@@ -3,7 +3,7 @@ import {SafeAreaView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useSetRecoilState} from 'recoil';
 
-import {CREATE_CHAT, CHAT} from '../../constants';
+import {CREATE_CHAT, CHAT, PLACEHOLDER_AVATAR} from '../../constants';
 import {fbAuth, fbFirestore} from '../../firebase';
 import {MyAvatar, MyList} from '../../components';
 import {CameraSVG} from '../../assets/svgs/camera';
@@ -55,7 +55,9 @@ export function AppScreen() {
       .onSnapshot((snapShot) => {
         const formatData = snapShot.docs.map((doc) => ({
           id: doc.id,
-          chatName: doc.data().chatName,
+          url: PLACEHOLDER_AVATAR,
+          title: doc.data().chatName,
+          description: 'ABC',
         }));
         // see next step
         setChats(formatData);
@@ -75,11 +77,7 @@ export function AppScreen() {
 
   const navigateCreateChat = () => navigation.navigate(CREATE_CHAT);
 
-  const navigateChat = ({id, chatName}) =>
-    navigation.navigate(CHAT, {
-      id,
-      chatName,
-    });
+  const navigateChat = (chat) => navigation.navigate(CHAT, chat);
 
   return (
     <SafeAreaView style={styles.container}>

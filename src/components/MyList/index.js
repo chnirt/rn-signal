@@ -12,12 +12,12 @@ import {MyAvatar} from '../MyAvatar';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const Item = ({index, item, onPress}) => {
-  const {chatName} = item;
+  const {url, title, description} = item;
 
   return (
     <TouchableOpacity style={styles.item} onPress={() => onPress(item)}>
       <View style={styles.avatarContainer}>
-        <MyAvatar index={index} name={chatName} />
+        <MyAvatar index={index} name={title} uri={url} />
       </View>
       <View style={styles.contentContainer}>
         <MyText
@@ -26,14 +26,14 @@ const Item = ({index, item, onPress}) => {
           style={styles.title}
           numberOfLines={1}
           ellipsizeMode="tail">
-          {chatName}
+          {title}
         </MyText>
         <MyText
           h5
           style={styles.description}
           numberOfLines={1}
           ellipsizeMode="tail">
-          {/* {description} */}
+          {description}
         </MyText>
       </View>
     </TouchableOpacity>

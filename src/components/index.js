@@ -4,3 +4,4 @@ export * from './MyText';
 export * from './MyList';
 export * from './MyAvatar';
 export * from './MyLoading';
+export * from './MyGiftedChat';

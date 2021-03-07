@@ -3,3 +3,4 @@ import firestore from '@react-native-firebase/firestore';
 
 export const fbAuth = auth();
 export const fbFirestore = firestore();
+export const fbTimestamp = firestore.FieldValue.serverTimestamp();

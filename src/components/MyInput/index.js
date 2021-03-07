@@ -16,8 +16,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingVertical: 10,
     margin: 10,
+    // flex: 1,
   },
   input: {
-    width: '100%',
+    // width: '100%',
   },
 });
