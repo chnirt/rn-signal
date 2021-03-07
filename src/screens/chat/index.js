@@ -1,8 +1,5 @@
 import React, {Fragment, useEffect, useLayoutEffect, useState} from 'react';
 import {
-  FlatList,
-  KeyboardAvoidingView,
-  Platform,
   StyleSheet,
   View,
   TouchableOpacity,
@@ -11,8 +8,14 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/core';
+import moment from 'moment';
 
-import {MyAvatar, MyGiftedChat, MyText} from '../../components';
+import {
+  MyAvatar,
+  MyGiftedChat,
+  MyText,
+  MyKeyboardAvoidingView,
+} from '../../components';
 import {
   LeftArrowSVG,
   VideoCameraSVG,
@@ -43,7 +46,7 @@ export function ChatScreen() {
         const formatData = snapShot.docs.map((doc) => ({
           id: doc.id,
           text: doc.data().message,
-          createdAt: new Date(doc.data().timestamp?.seconds * 1000),
+          createdAt: moment(doc.data().timestamp?.seconds * 1000).fromNow(),
           user: {
             _id: doc.data().email,
             name: doc.data().displayName,
@@ -60,7 +63,6 @@ export function ChatScreen() {
           //     },
         }));
         setMessages(formatData);
-        console.log(JSON.stringify(formatData, null, 2));
       });
 
     return subscriber;
@@ -74,7 +76,7 @@ export function ChatScreen() {
       headerTitle: () => (
         <View style={styles.headerContainer}>
           <MyAvatar name={chatName} uri={url} />
-          <MyText style={styles.headerText} h3 color="#fff" bold>
+          <MyText style={styles.headerText} h3 bold color="#fff">
             {chatName}
           </MyText>
         </View>
@@ -86,7 +88,9 @@ export function ChatScreen() {
       ),
       headerRight: () => (
         <View style={styles.rightHeaderContainer}>
-          <VideoCameraSVG width={20} height={20} fill="#fff" />
+          <View style={styles.iconItem}>
+            <VideoCameraSVG width={20} height={20} fill="#fff" />
+          </View>
           <View style={styles.iconItem}>
             <PhoneSVG width={20} height={20} fill="#fff" />
           </View>
@@ -94,21 +98,6 @@ export function ChatScreen() {
       ),
     });
   }, [navigation]);
-
-  useEffect(() => {
-    // setMessages([
-    //   {
-    //     _id: 1,
-    //     text: 'Hello developer',
-    //     createdAt: new Date(),
-    //     user: {
-    //       _id: 2,
-    //       name: 'React Native',
-    //       avatar: 'https://placeimg.com/140/140/any',
-    //     },
-    //   },
-    // ]);
-  }, []);
 
   const goBack = () => navigation.goBack();
 
@@ -131,40 +120,34 @@ export function ChatScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <KeyboardAvoidingView
-        style={styles.keyboardContainer}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={90}>
-        <TouchableWithoutFeedback onPress={dismiss}>
-          <Fragment>
-            <MyGiftedChat
-              messages={messages}
-              onSend={(messages) => onSend(messages)}
-              user={{
-                _id: fbAuth?.currentUser?.email,
-              }}
+    <MyKeyboardAvoidingView>
+      <Fragment>
+        <MyGiftedChat
+          messages={messages}
+          onSend={(messages) => onSend(messages)}
+          user={{
+            _id: fbAuth?.currentUser?.email,
+          }}
+        />
+
+        <View style={styles.footer}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Message..."
+              multiline
+              value={input}
+              onChangeText={setInput}
+              // onSubmitEditing={onSend}s
             />
+          </View>
 
-            <View style={styles.footer}>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.input}
-                  value={input}
-                  onChangeText={setInput}
-                  onSubmitEditing={onSend}
-                  placeholder="Message..."
-                />
-              </View>
-
-              <TouchableOpacity style={styles.button} onPress={onSend}>
-                <SendSVG width={20} height={20} fill={PRIMARY_COLOR} />
-              </TouchableOpacity>
-            </View>
-          </Fragment>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </View>
+          <TouchableOpacity style={styles.button} onPress={onSend}>
+            <SendSVG width={20} height={20} fill={PRIMARY_COLOR} />
+          </TouchableOpacity>
+        </View>
+      </Fragment>
+    </MyKeyboardAvoidingView>
   );
 }
 
@@ -176,10 +159,11 @@ const styles = StyleSheet.create({
   headerText: {
     marginLeft: 20,
   },
-  container: {flex: 1, backgroundColor: '#fff'},
-  keyboardContainer: {flex: 1},
 
-  footer: {flexDirection: 'row', padding: 20},
+  footer: {
+    flexDirection: 'row',
+    padding: 20,
+  },
   inputContainer: {
     flex: 1,
     height: 40,

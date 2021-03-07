@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {useRecoilState} from 'recoil';
 
-import {fbAuth} from '../firebase';
+import {fbAuth, fbMessage, requestUserPermission} from '../firebase';
 import {
   LoginScreen,
   RegisterScreen,
@@ -44,9 +44,21 @@ export function AppStack() {
     setLoading(false);
   }
 
+  useLayoutEffect(() => {
+    requestUserPermission();
+  }, []);
+
   useEffect(() => {
     const subscriber = fbAuth.onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = fbMessage.onMessage(async (remoteMessage) => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
   }, []);
 
   if (initializing) return null;

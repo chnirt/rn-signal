@@ -96,7 +96,7 @@ export function RegisterScreen() {
         containerStyle={styles.button}
         onPress={register}
         title="Register"
-        disable={!input}
+        disable={!email}
       />
     </KeyboardAvoidingView>
   );
