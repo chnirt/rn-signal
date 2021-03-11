@@ -2,27 +2,27 @@
  * @format
  */
 
-// import React from 'react';
+import React from 'react';
 import {AppRegistry, Platform} from 'react-native';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification from 'react-native-push-notification';
 import App from './App';
 import {name as appName} from './app.json';
-// import {fbMessage} from './src/firebase';
+import {fbMessage} from './src/firebase';
 
 // Register background handler
-// fbMessage.setBackgroundMessageHandler(async (remoteMessage) => {
-//   console.log('Message handled in the background!', remoteMessage);
-// });
+fbMessage.setBackgroundMessageHandler(async (remoteMessage) => {
+  console.log('Message handled in the background!', remoteMessage);
+});
 
-// function HeadlessCheck({isHeadless}) {
-//   if (isHeadless) {
-//     // App has been launched in the background by iOS, ignore
-//     return null;
-//   }
+function HeadlessCheck({isHeadless}) {
+  if (isHeadless) {
+    // App has been launched in the background by iOS, ignore
+    return null;
+  }
 
-//   return <App />;
-// }
+  return <App />;
+}
 
 // Must be outside of any component LifeCycle (such as `componentDidMount`).
 PushNotification.configure({
@@ -31,14 +31,14 @@ PushNotification.configure({
     console.log('TOKEN:', token);
   },
 
-  // (required) Called when a remote is received or opened, or local notification is opened
+  // (required) Called when a remote is received or opened, owr local notification is opened
   onNotification: function (notification) {
     console.log('NOTIFICATION:', notification);
 
     // process the notification
 
     // (required) Called when a remote is received or opened, or local notification is opened
-    // notification.finish(PushNotificationIOS.FetchResult.NoData);
+    notification.finish(PushNotificationIOS.FetchResult.NoData);
   },
 
   // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
@@ -75,4 +75,4 @@ PushNotification.configure({
   requestPermissions: Platform.OS === 'ios',
 });
 
-AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent(appName, () => HeadlessCheck);

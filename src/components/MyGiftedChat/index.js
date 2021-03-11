@@ -27,10 +27,10 @@ export function MyGiftedChat({user, messages}) {
               styles.bubble,
               isSender ? styles.senderBubble : styles.receiverBubble,
             ]}>
-            <MyText h4 style={styles.text}>
+            <MyText h5 style={styles.text}>
               {text}
             </MyText>
-            <MyText h5 style={[styles.text, styles.createdAt]}>
+            <MyText p style={[styles.text, styles.createdAt]}>
               {createdAt}
             </MyText>
           </View>

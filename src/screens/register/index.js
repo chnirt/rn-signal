@@ -26,33 +26,31 @@ export function RegisterScreen() {
     });
   }, [navigation]);
 
-  const register = () => {
-    // console.log('Register');
-    setLoading(true);
+  const register = async () => {
+    try {
+      setLoading(true);
+      const authUser = await fbAuth.createUserWithEmailAndPassword(email, pwd);
 
-    fbAuth
-      .createUserWithEmailAndPassword(email, pwd)
-      .then((authUser) => {
-        // console.log('User account created & signed in!');
+      authUser &&
         authUser.user.updateProfile({
           displayName: fullName,
           photoURL: imageUrl.length > 0 ? imageUrl : PLACEHOLDER_AVATAR,
         });
-      })
-      .catch((error) => {
-        if (error.code === 'auth/email-already-in-use') {
-          // console.log('That email address is already in use!');
-        }
+    } catch (error) {
+      if (error.code === 'auth/email-already-in-use') {
+        // console.log('That email address is already in use!');
+      }
 
-        if (error.code === 'auth/invalid-email') {
-          // console.log('That email address is invalid!');
-        }
+      if (error.code === 'auth/invalid-email') {
+        // console.log('That email address is invalid!');
+      }
 
-        // console.error(error);
-        // eslint-disable-next-line no-alert
-        alert(error.message);
-        setLoading(false);
-      });
+      // console.error(error);
+      // eslint-disable-next-line no-alert
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

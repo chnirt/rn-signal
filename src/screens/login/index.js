@@ -6,6 +6,7 @@ import {useSetRecoilState} from 'recoil';
 import {MyInput, MyButton} from '../../components';
 import {fbAuth} from '../../firebase';
 import {loadingState} from '../../recoils';
+import {LOGIN_PHONE, REGISTER} from '../../constants';
 
 export function LoginScreen() {
   const navigation = useNavigation();
@@ -14,31 +15,28 @@ export function LoginScreen() {
   const [email, setEmail] = useState('trinhchinchin@gmail.com');
   const [pwd, setPwd] = useState('12345678');
 
-  const login = () => {
-    // console.log('Login');
-    // console.log('email', email);
-    // console.log('pwd', pwd);
-    setLoading(true);
+  const login = async () => {
+    try {
+      setLoading(true);
 
-    fbAuth
-      .signInWithEmailAndPassword(email, pwd)
-      .then(() => {
-        // console.log('User signed in anonymously');
-      })
-      .catch((error) => {
-        if (error.code === 'auth/operation-not-allowed') {
-          // console.log('Enable anonymous in your firebase console.');
-        }
+      const authUser = await fbAuth.signInWithEmailAndPassword(email, pwd);
+    } catch (error) {
+      if (error.code === 'auth/operation-not-allowed') {
+        // console.log('Enable anonymous in your firebase console.');
+      }
 
-        // console.error(error);
+      // console.error(error);
 
-        // eslint-disable-next-line no-alert
-        alert(error.message);
-        setLoading(false);
-      });
+      // eslint-disable-next-line no-alert
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const navigateRegister = () => navigation.navigate('Register');
+  const loginPhone = () => navigation.navigate(LOGIN_PHONE);
+
+  const navigateRegister = () => navigation.navigate(REGISTER);
 
   const localNotification = () => {
     PushNotification.channelExists('com.rnsignal', function (exists) {
@@ -126,6 +124,11 @@ export function LoginScreen() {
       </View>
 
       <MyButton containerStyle={styles.button} onPress={login} title="Login" />
+      <MyButton
+        containerStyle={styles.button}
+        onPress={loginPhone}
+        title="Connect with Phone"
+      />
       <MyButton
         containerStyle={styles.button}
         onPress={navigateRegister}

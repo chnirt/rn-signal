@@ -12,12 +12,13 @@ import {NavigationContainer} from '@react-navigation/native';
 import {RecoilRoot} from 'recoil';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification from 'react-native-push-notification';
+import messaging from '@react-native-firebase/messaging';
 
 import {AppStack} from './src/routes';
 import {Platform} from 'react-native';
 
 const App = () => {
-  const [permissions, setPermissions] = useState({});
+  // const [permissions, setPermissions] = useState({});
 
   /**
    * By calling this function, notification with category `userAction` will have action buttons
@@ -151,18 +152,42 @@ const App = () => {
   };
 
   useEffect(() => {
+    // Assume a message-notification contains a "type" property in the data payload of the screen to open
+    // messaging().onNotificationOpenedApp((remoteMessage) => {
+    //   console.log(
+    //     'Notification caused app to open from background state:',
+    //     remoteMessage.notification,
+    //   );
+    //   navigation.navigate(remoteMessage.data.type);
+    // });
+    // Check whether an initial notification is available
+    // messaging()
+    //   .getInitialNotification()
+    //   .then((remoteMessage) => {
+    //     if (remoteMessage) {
+    //       console.log(
+    //         'Notification caused app to open from quit state:',
+    //         remoteMessage.notification,
+    //       );
+    //       // setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
+    //     }
+    //     // setLoading(false);
+    //   });
+  }, []);
+
+  useEffect(() => {
     if (Platform.OS === 'ios') {
-      setNotificationCategories();
-      addNotificationRequest();
+      // setNotificationCategories();
+      // addNotificationRequest();
       return;
     }
 
-    createChannel();
-    localNotification();
+    // createChannel();
+    // localNotification();
 
-    // setTimeout(() => {
-    //   localNotification();
-    // }, 10000);
+    PushNotificationIOS.addEventListener('register', (token) => {
+      console.log('MyAPNSTOKEN', token);
+    });
   }, []);
 
   useEffect(() => {
@@ -170,6 +195,7 @@ const App = () => {
   });
 
   const onRemoteNotification = (notification) => {
+    console.log(notification);
     const actionIdentifier = notification.getActionIdentifier();
 
     if (actionIdentifier === 'open') {

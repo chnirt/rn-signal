@@ -7,7 +7,7 @@ export const fbFirestore = firestore();
 export const fbTimestamp = firestore.FieldValue.serverTimestamp();
 export const fbMessage = messaging();
 
-export async function requestUserPermission() {
+export const requestUserPermission = async () => {
   const authStatus = await messaging().requestPermission();
   const enabled =
     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
@@ -16,4 +16,16 @@ export async function requestUserPermission() {
   if (enabled) {
     console.log('Authorization status:', authStatus);
   }
-}
+};
+
+export const onMessage = () => {
+  messaging().onMessage(async (remoteMessage) => {
+    Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+  });
+};
+
+export const setBackgroundMessageHandler = () => {
+  messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+    console.log('Message handled in the background!', remoteMessage);
+  });
+};

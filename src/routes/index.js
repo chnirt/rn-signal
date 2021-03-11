@@ -5,6 +5,8 @@ import {useRecoilState} from 'recoil';
 import {fbAuth, fbMessage, requestUserPermission} from '../firebase';
 import {
   LoginScreen,
+  LoginPhoneScreen,
+  OTPScreen,
   RegisterScreen,
   AppScreen,
   CreateChatScreen,
@@ -13,6 +15,8 @@ import {
 import {MyLoading} from '../components';
 import {
   LOGIN,
+  LOGIN_PHONE,
+  OTP,
   REGISTER,
   APP,
   CREATE_CHAT,
@@ -20,6 +24,7 @@ import {
   PRIMARY_COLOR,
 } from '../constants';
 import {loadingState} from '../recoils';
+import {Alert} from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -72,6 +77,8 @@ export function AppStack() {
       {!user ? (
         <>
           <Stack.Screen name={LOGIN} component={LoginScreen} />
+          <Stack.Screen name={LOGIN_PHONE} component={LoginPhoneScreen} />
+          <Stack.Screen name={OTP} component={OTPScreen} />
           <Stack.Screen name={REGISTER} component={RegisterScreen} />
         </>
       ) : (

@@ -44,5 +44,5 @@ export function MyKeyboardAvoidingView({containerStyle, children, ...rest}) {
 const styles = StyleSheet.create({
   container: {flex: 1},
   keyboardContainer: {flex: 1},
-  dismissContainer: {flex: 1},
+  dismissContainer: {flex: 1, backgroundColor: 'red'},
 });
