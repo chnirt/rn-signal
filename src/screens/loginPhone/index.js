@@ -16,6 +16,7 @@ import {
   MyKeyboardAvoidingView,
   MyLoading,
   MyText,
+  MyTextInputMask,
 } from '../../components';
 import {countriesMockData} from '../../mocks';
 import {useDebounce} from '../../hooks';
@@ -24,7 +25,7 @@ import {OTP} from '../../constants';
 export function LoginPhoneScreen() {
   const navigation = useNavigation();
 
-  const [phoneNumber, setPhoneNumber] = useState('0704498756');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [countryCode, setCountryCode] = useState('+84');
   const [countriesModalVisible, setCountriesModalVisible] = useState(false);
 
@@ -116,7 +117,7 @@ export function LoginPhoneScreen() {
     );
   };
 
-  const MemoizedCountriesModal = memo(CountriesModal);
+  // const MemoizedCountriesModal = memo(CountriesModal);
 
   return (
     <MyKeyboardAvoidingView>
@@ -133,23 +134,32 @@ export function LoginPhoneScreen() {
               onPress={openCountriesModal}>
               <Text>{countryCode} |</Text>
             </TouchableOpacity>
-            <TextInput
+            <MyTextInputMask
+              style={styles.phoneInput}
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
+              // mask="0704--498--756"
+              placeholder="0704--498--756"
+              keyboardType="phone-pad"
+            />
+            {/* <TextInput
               style={styles.phoneInput}
               value={phoneNumber}
               onChangeText={setPhoneNumber}
               placeholder="0704 498 756"
               keyboardType="phone-pad"
-            />
+            /> */}
           </View>
         </View>
+
         <View style={styles.footer}>
           <MyButton title="Continue" onPress={navigateOTP} />
         </View>
 
-        <MemoizedCountriesModal
+        {/* <MemoizedCountriesModal
           visible={countriesModalVisible}
           onSelect={onSelect}
-        />
+        /> */}
         {/* <CountriesModal visible={countriesModalVisible} onSelect={onSelect} /> */}
       </Fragment>
     </MyKeyboardAvoidingView>
